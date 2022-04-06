@@ -1,5 +1,5 @@
 windows_vm,linux_vm,appName,version
 Win1,rhel1,dsa,9999
-win1,rhel2,jsa,1000
+Win1,rhel2,jsa,1000
 Win2,rhel3,der,500
 Win2,rhel1,met,6000
