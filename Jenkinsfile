@@ -6,7 +6,7 @@ def nodeBuildMap = [:]
 def headers = []
 def deleteDirExecuted = []
 
-new File("/tmp/test.csv").readLines().eachWithIndex { row, rowIndex ->
+new File("runVM.csv").readLines().eachWithIndex { row, rowIndex ->
     if (rowIndex == 0) { headers = row.split(',') }
     else {
         def tmpMap = [:]
