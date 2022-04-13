@@ -47,7 +47,7 @@ def loadCSVFileAndStages(){
 
 
 pipeline {
-    agent none
+    agent any
     stages {
 		stage('Checkout sources') {
             steps {
