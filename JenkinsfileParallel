@@ -30,7 +30,8 @@ def loadCSVFileAndStages(){
 	}
 	println(nodeDetails)
 	for (nodeList in nodeDetails) {
-		def windowLabel = nodeList["windows_vm"]
+		println(nodeList)
+		def windowLabel = nodeList["windows_vm"]		
 		def linuxLabel = nodeList["linux_vm"]
 		def appName = nodeList["app_name"]
 		// Create a map to pass in to the 'parallel' step so we can fire all the builds at once
