@@ -75,9 +75,9 @@ pipeline {
                 script {
 					for (nodeList in nodeDetails) {
 						def windowLabel = nodeList["windows_vm"]
-						node(nodename) {
-							if(!deleteDirExecuted.contains(nodename)){
-								deleteDirExecuted.add(nodename)
+						node(windowLabel) {
+							if(!deleteDirExecuted.contains(windowLabel)){
+								deleteDirExecuted.add(windowLabel)
 								deleteDir() //cleanup the workspace
 							}
 						}
