@@ -1,0 +1,79 @@
+import groovy.transform.Field
+@Field
+def nodeDetails = []; //add nodedetail from csv
+@Field
+def nodeBuildMap = [:]
+def headers = []
+
+def loadCSVFileAndStages(){
+	env.WORKSPACE = pwd()
+	nodeDetails = [];
+	def rowIndex = 0
+	readFile("${env.WORKSPACE}/runVM.csv").split('\n').each { row ->
+			//println("row : "+row.toString())
+			//println("rowIndex : "+rowIndex)
+			if (rowIndex == 0) { 
+				headers = row.split(',') 
+				//println(headers.toString())
+			}
+			else {
+				def tmpMap = [:]
+				def cells = row.split(',').eachWithIndex { cell, cellIndex ->
+					//println("cellIndex : "+cellIndex)
+					//println("cell : "+cell)
+					tmpMap[headers[cellIndex]] = cell
+				}
+				nodeDetails.add(tmpMap)
+			}
+			rowIndex = rowIndex + 1
+	}
+	println(nodeDetails)
+	for (nodeList in nodeDetails) {
+		def windowLabel = nodeList["windows_vm"]
+		def linuxLabel = nodeList["linux_vm"]
+		def appName = nodeList["app_name"]
+		// Create a map to pass in to the 'parallel' step so we can fire all the builds at once
+		nodeBuildMap[appName] = {
+			stage("window") {
+				//running on windows node
+				node(windowLabel) {
+					bat 'dir' //sample command execute on window node
+				}
+			}			
+		}
+	}
+}
+
+
+
+pipeline {
+    agent none
+    stages {
+		stage('Checkout sources') {
+            steps {
+                script {
+                    try{
+						sh("rm -rf *") //cleanup the workspace
+                        checkout scm // Checks out the repo where the Jenkinsfile is located
+						loadCSVFileAndStages();
+                    } catch(e){
+                        println(e)
+                    }
+                    
+                }
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    parallel nodeBuildMap
+                }
+            }
+        }
+        stage("result") {
+            steps {
+                println "Combining the result"
+            }
+        }
+    }
+}
