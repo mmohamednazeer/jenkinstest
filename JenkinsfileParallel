@@ -33,7 +33,7 @@ def loadCSVFileAndStages(){
 		println(nodeList)
 		def windowLabel = nodeList["windows_vm"]		
 		def linuxLabel = nodeList["linux_vm"]
-		def appName = nodeList["app_name"]
+		def appName = nodeList["appName"]
 		// Create a map to pass in to the 'parallel' step so we can fire all the builds at once
 		nodeBuildMap[appName] = {
 			stage("window") {
