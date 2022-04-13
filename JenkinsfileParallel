@@ -43,6 +43,7 @@ def loadCSVFileAndStages(){
 				}
 			}			
 		}
+		println(nodeBuildMap)
 	}
 	return nodeBuildMap;
 }
